@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Visualisasi Bubble Sort</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f6f9;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.container {
+    margin-top: 30px;
+}
+
+#arrayContainer {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 300px;
+    margin: 20px auto;
+    width: 80%;
+    border: 1px solid #ccc;
+    background: white;
+}
+
+.bar {
+    width: 30px;
+    margin: 0 3px;
+    background-color: #3498db;
+    transition: 0.3s;
+}
+
+.bar.active {
+    background-color: #e74c3c;
+}
+
+.bar.sorted {
+    background-color: #2ecc71;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+input {
+    padding: 8px;
+    width: 250px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Visualisasi Algoritma Bubble Sort</h1>
+
+<div class="container">
+    <input type="text" id="inputArray" placeholder="Contoh: 5,3,8,4,2">
+    <br>
+    <button onclick="generateArray()">Generate</button>
+    <button onclick="bubbleSort()">Sort</button>
+</div>
+
+<div id="arrayContainer"></div>
+
+<script>
+let array = [];
+
+function generateArray() {
+    const input = document.getElementById("inputArray").value;
+    array = input.split(",").map(Number);
+    renderArray();
+}
+
+function renderArray(activeIndex = -1, sortedIndex = -1) {
+    const container = document.getElementById("arrayContainer");
+    container.innerHTML = "";
+
+    array.forEach((value, index) => {
+        const bar = document.createElement("div");
+        bar.classList.add("bar");
+        bar.style.height = value * 5 + "px";
+
+        if (index === activeIndex) {
+            bar.classList.add("active");
+        }
+
+        if (index >= sortedIndex && sortedIndex !== -1) {
+            bar.classList.add("sorted");
+        }
+
+        container.appendChild(bar);
+    });
+}
+
+async function bubbleSort() {
+    let n = array.length;
+
+    for (let i = 0; i < n - 1; i++) {
+        for (let j = 0; j < n - i - 1; j++) {
+            renderArray(j);
+            await sleep(300);
+
+            if (array[j] > array[j + 1]) {
+                let temp = array[j];
+                array[j] = array[j + 1];
+                array[j + 1] = temp;
+                renderArray(j);
+                await sleep(300);
+            }
+        }
+        renderArray(-1, n - i - 1);
+    }
+
+    renderArray();
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+</script>
+
+</body>
+</html>
